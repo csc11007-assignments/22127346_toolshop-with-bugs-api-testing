@@ -22,7 +22,7 @@ services:
       target: development
     working_dir: /app
     volumes:
-      - ./${SPRINT}/UI:/app:cached
+      - ./sprint5-with-bugs/UI:/app:cached
     ports:
       - 4200:4200
     command: >
