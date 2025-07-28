@@ -32,21 +32,7 @@ jobs:
           export DISABLE_LOGGING=true
           docker compose -f docker-compose.yml -f docker-compose.override.yml up -d --force-recreate
       - name: Wait for containers to be ready ⏳
-        run: sleep 30
-      - name: Install Composer dependencies 📦
-        run: |
-          docker compose run --rm composer
-      - name: Debug Laravel setup 🔍
-        run: |
-          docker compose exec -T laravel-api ls -la
-          docker compose exec -T laravel-api ls -la vendor/ || echo "Vendor directory not found"
-          docker compose exec -T laravel-api ls -la vendor/autoload.php || echo "Autoload file not found"
-      - name: Generate Laravel key 🔑
-        run: |
-          docker compose exec -T laravel-api php artisan key:generate
-      - name: Set proper permissions 🔐
-        run: |
-          docker compose exec -T laravel-api chmod -R 777 storage bootstrap/cache
+        run: sleep 60
       - name: Create & Seed database 🌱
         run: |
           docker compose exec -T laravel-api php artisan migrate:refresh --seed
