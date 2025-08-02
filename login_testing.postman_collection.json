@@ -80,10 +80,10 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8091/users/login",
-					"protocol": "http",
+					"raw": "https://api-with-bugs.practicesoftwaretesting.com/users/login",
+					"protocol": "https",
 					"host": [
-						"localhost:8091"
+						"api-with-bugs.practicesoftwaretesting.com"
 					],
 					"path": [
 						"users",
