@@ -39,10 +39,11 @@ jobs:
       - name: Test database connection 🔗
         run: |
           docker compose exec -T laravel-api php artisan tinker --execute="echo 'Database connection: ' . (DB::connection()->getPdo() ? 'OK' : 'FAILED');"
-      - name: GET Version
-        run: curl -v -X GET 'http://localhost:8091/status'
-      - name: POST login
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run API tests with Newman
         run: |
-          curl -v -X POST 'http://localhost:8091/users/login' \
-          -H 'Content-Type: application/json' \
-          --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
+          newman run login_testing.postman_collection.json \
+            --iteration-data login_data.csv \
+            --reporters cli
