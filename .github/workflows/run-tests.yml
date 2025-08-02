@@ -36,16 +36,6 @@ jobs:
       - name: Install Composer dependencies 📦
         run: |
           docker compose run --rm composer
-      - name: Debug Laravel setup 🔍
-        run: |
-          docker compose exec -T laravel-api ls -la
-          docker compose exec -T laravel-api ls -la vendor/ || echo "Vendor directory not found"
-      - name: Generate Laravel key 🔑
-        run: |
-          docker compose exec -T laravel-api php artisan key:generate
-      - name: Set proper permissions 🔐
-        run: |
-          docker compose exec -T laravel-api chmod -R 777 storage bootstrap/cache
       - name: Create & Seed database 🌱
         run: |
           docker compose exec -T laravel-api php artisan migrate:refresh --seed
