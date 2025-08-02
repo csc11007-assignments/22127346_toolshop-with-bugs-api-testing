@@ -83,8 +83,7 @@
 					"raw": "http://localhost:8091/users/login",
 					"protocol": "http",
 					"host": [
-						"localhost",
-						"8091"
+						"localhost:8091"
 					],
 					"path": [
 						"users",
