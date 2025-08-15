@@ -53,11 +53,29 @@ jobs:
           node-version: "18"
       - run: npm install -g newman newman-reporter-htmlextra
 
-      - name: Run Newman Tests
+      - name: Run /POST/products tests
         run: |
-          newman run sprint5-with-bugs/API/tests/api/login_testing.postman_collection.json \
+          newman run sprint5-with-bugs/API/tests/api/toolshop.postman_collection.json \
             -e sprint5-with-bugs/API/tests/api/environment.json \
-            --iteration-data sprint5-with-bugs/API/tests/api/login_data.csv \
+            --iteration-data sprint5-with-bugs/API/tests/api/post_products.csv \
+            --reporters cli,junit,htmlextra \
+            --reporter-junit-export newman-report.xml \
+            --reporter-htmlextra-export newman-report.html
+      
+      - name: Run /PUT/products tests
+        run: |
+          newman run sprint5-with-bugs/API/tests/api/toolshop.postman_collection.json \
+            -e sprint5-with-bugs/API/tests/api/environment.json \ 
+            --iteration-data sprint5-with-bugs/API/tests/api/put_products.csv \
+            --reporters cli,junit,htmlextra \
+            --reporter-junit-export newman-report.xml \
+            --reporter-htmlextra-export newman-report.html
+
+      - name: Run /PUT/products tests
+        run: |
+          newman run sprint5-with-bugs/API/tests/api/toolshop.postman_collection.json \
+            -e sprint5-with-bugs/API/tests/api/environment.json \ 
+            --iteration-data sprint5-with-bugs/API/tests/api/del_products.csv \
             --reporters cli,junit,htmlextra \
             --reporter-junit-export newman-report.xml \
             --reporter-htmlextra-export newman-report.html
