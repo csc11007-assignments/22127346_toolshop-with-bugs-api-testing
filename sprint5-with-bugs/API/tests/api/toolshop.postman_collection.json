@@ -11,7 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "https://api-with-bugs.practicesoftwaretesting.com/products"
+				"url": "http://localhost:8091/products"
 			},
 			"response": []
 		},
@@ -77,7 +77,7 @@
 						}
 					}
 				},
-				"url": "https://api-with-bugs.practicesoftwaretesting.com/products"
+				"url": "http://localhost:8091/products"
 			},
 			"response": []
 		},
@@ -117,7 +117,7 @@
 						}
 					}
 				},
-				"url": "https://api-with-bugs.practicesoftwaretesting.com/users/login"
+				"url": "http://localhost:8091/users/login"
 			},
 			"response": []
 		},
@@ -162,7 +162,7 @@
 				},
 				"method": "DELETE",
 				"header": [],
-				"url": "https://api-with-bugs.practicesoftwaretesting.com/products/{{productId}}"
+				"url": "http://localhost:8091/products/{{productId}}"
 			},
 			"response": []
 		},
@@ -177,7 +177,7 @@
 				},
 				"method": "GET",
 				"header": [],
-				"url": "https://api-with-bugs.practicesoftwaretesting.com/products/{{productId}}"
+				"url": "http://localhost:8091/products/{{productId}}"
 			},
 			"response": []
 		},
@@ -201,7 +201,7 @@
 						}
 					}
 				},
-				"url": "https://api-with-bugs.practicesoftwaretesting.com/products/{{productId}}"
+				"url": "http://localhost:8091/products/{{productId}}"
 			},
 			"response": []
 		}
