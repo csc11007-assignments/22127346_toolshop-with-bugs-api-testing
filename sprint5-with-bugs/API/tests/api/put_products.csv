@@ -1,0 +1,11 @@
+name,description,price,category_id,brand_id,product_image_id,is_location_offer,is_rental,updated_name,updated_description,updated_price,post_exp_status_code,put_exp_status_code,get_exp_status_code,test_case
+Test Product 1,Original description,10.00,1,1,1,0,0,Updated Name 1,Updated description for product 1,12.50,201,200,200,Update all fields in a product
+Test Product 2,Product for update test,50.00,1,2,1,0,1,Updated Name 2,Updated description for product 2,45.00,201,200,200,Update rental field in a product
+Test Product 3,Original description,30.00,1,1,1,0,0,Test Product 1,Attempt to update with duplicate name,30.00,201,400,200,Update with duplicate name
+Test Product 4,Valid product,15.00,1,1,1,0,0,Updated 4,Updated description,15.00,201,200,200,Update name and description only
+Test Product 5,Valid product,25.00,1,1,1,0,0,,Updated description,25.00,201,400,200,Update with missing name
+Test Product 6,Valid product,35.00,1,1,1,0,0,Valid update,Updated description,-10.00,201,400,200,Update with invalid price (negative)
+Test Product 7,Valid product,40.00,1,1,1,0,0,Valid update,,40.00,201,200,200,Update with missing description
+Test Product 8,Valid product,55.00,1,1,1,0,0,Valid update,Updated description,0.00,201,200,200,Update with zero price
+Test Product 9,Valid product,65.00,1,1,1,0,0,Very long name to test character limit. This should exceed the allowed length.,Updated description,65.00,201,400,200,Update with overly long name
+Test Product 10,Valid product,75.00,1,1,1,0,0,Valid name,Updated description,75.00,201,200,200,Successful update (control)

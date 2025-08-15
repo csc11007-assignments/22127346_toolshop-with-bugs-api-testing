@@ -1,0 +1,7 @@
+email,password,name,description,price,category_id,brand_id,product_image_id,is_location_offer,is_rental,post_exp_status_code,del_exp_status_code,test_case
+admin@practicesoftwaretesting.com,welcome01,Screwdriver,A new manual screwdriver,8.99,1,1,1,0,0,201,204,Valid product creation
+admin@practicesoftwaretesting.com,welcome01,Drill,A heavy-duty drill for construction,99.99,1,2,2,1,1,201,204,Valid rental product
+admin@practicesoftwaretesting.com,welcome01,Invalid Price,Testing an invalid price,-5.00,1,1,1,0,0,400,404,Requested item not found
+admin@practicesoftwaretesting.com,welcome01,Long Description,This description is intentionally very long to test the character limit of the API. It contains more than the usual amount of text to see how the system handles the input. This description is intentionally very long to test the character limit of the API. It contains more than the usual amount of text to see how the system handles the input.,15.50,1,1,1,0,0,201,204,Long description
+customer@practicesoftwaretesting.com,welcome01,Customer Product,A product to be created by a customer,5.99,1,1,1,0,0,201,401,Unauthorized deletion attempt
+admin@practicesoftwaretesting.com,welcome01,,,1.99,1,1,1,0,0,422,409,Returns when the entity is used elsewhere

@@ -1,3 +1,0 @@
-email,password,expectedStatus
-customer@practicesoftwaretesting.com,welcome01,200
-invalid@example.com,wrongpassword,401

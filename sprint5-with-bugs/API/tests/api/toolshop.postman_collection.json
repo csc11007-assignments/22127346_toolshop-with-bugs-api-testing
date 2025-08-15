@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "a4740aaf-0f68-4a2a-a1fa-fd223f413629",
+		"name": "toolshop-api-testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "38289559"
+	},
+	"item": [
+		{
+			"name": "/products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "https://api-with-bugs.practicesoftwaretesting.com/products"
+			},
+			"response": []
+		},
+		{
+			"name": "/products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body as JSON\r",
+							"const responseBody = pm.response.json();\r",
+							"const responseStatusCode = pm.response.code;\r",
+							"const testCaseName = pm.iterationData.get(\"test_case\");\r",
+							"\r",
+							"// Display the test case name in the console\r",
+							"console.log(`Running test case: ${testCaseName}`);\r",
+							"\r",
+							"// Check if the response status code matches the expected value from the CSV\r",
+							"const expectedStatusCode = pm.iterationData.get(\"post_exp_status_code\");\r",
+							"pm.test(`[${testCaseName}] Status code is ${expectedStatusCode}`, function () {\r",
+							"    pm.response.to.have.status(parseInt(expectedStatusCode));\r",
+							"});\r",
+							"\r",
+							"// Set the productId based on the response status code\r",
+							"if (responseStatusCode === 422) {\r",
+							"    // If the status code is 422, set the productId to 1\r",
+							"    pm.environment.set(\"productId\", 1);\r",
+							"    console.log(\"Product ID set to default (1) for invalid request.\");\r",
+							"} else if (responseBody && responseBody.id) {\r",
+							"    // For a successful request, set the productId from the response body\r",
+							"    pm.environment.set(\"productId\", responseBody.id);\r",
+							"    console.log(`New product ID saved: ${responseBody.id}`);\r",
+							"} else {\r",
+							"    // Handle cases where there's no ID in the response\r",
+							"    console.log(\"No product ID found in the response to save.\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"category_id\": {{category_id}},\r\n  \"brand_id\": {{brand_id}},\r\n  \"product_image_id\": {{product_image_id}},\r\n  \"is_location_offer\": {{is_location_offer}},\r\n  \"is_rental\": {{is_rental}}\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://api-with-bugs.practicesoftwaretesting.com/products"
+			},
+			"response": []
+		},
+		{
+			"name": "/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body as JSON\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"// Check if the response contains an access token\r",
+							"if (response && response.access_token) {\r",
+							"    // Set the environment variable 'accessToken' to the value of access_token\r",
+							"    pm.environment.set(\"accessToken\", response.access_token);\r",
+							"    console.log(\"Access Token saved to environment variable: \" + response.access_token);\r",
+							"} else {\r",
+							"    console.log(\"No access token found in the response.\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://api-with-bugs.practicesoftwaretesting.com/users/login"
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{{productId}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get the expected status code from the CSV data\r",
+							"const expectedStatusCode = pm.iterationData.get(\"del_exp_status_code\");\r",
+							"const testCaseName = pm.iterationData.get(\"test_case\");\r",
+							"\r",
+							"// Log the test case being executed\r",
+							"console.log(`Running test case: ${testCaseName}`);\r",
+							"\r",
+							"// Check if the response status code matches the expected value from the CSV\r",
+							"if (expectedStatusCode === \"Invalid or missing token\") {\r",
+							"    // For the case where no token is provided, we expect a 401 Unauthorized status\r",
+							"    pm.test(`[${testCaseName}] Status code is 401 Unauthorized`, function () {\r",
+							"        pm.response.to.have.status(401);\r",
+							"    });\r",
+							"} else {\r",
+							"    // For other cases, check against the specified status code\r",
+							"    pm.test(`[${testCaseName}] Status code is ${expectedStatusCode}`, function () {\r",
+							"        pm.response.to.have.status(parseInt(expectedStatusCode));\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{access_token}}"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "https://api-with-bugs.practicesoftwaretesting.com/products/{{productId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{{productId}}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{access_token}}"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://api-with-bugs.practicesoftwaretesting.com/products/{{productId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "/products/{{productId}}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "{{access_token}}"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"category_id\": {{category_id}},\r\n  \"brand_id\": {{brand_id}},\r\n  \"product_image_id\": {{product_image_id}},\r\n  \"is_location_offer\": {{is_location_offer}},\r\n  \"is_rental\": {{is_rental}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://api-with-bugs.practicesoftwaretesting.com/products/{{productId}}"
+			},
+			"response": []
+		}
+	]
+}

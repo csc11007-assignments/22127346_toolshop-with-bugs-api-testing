@@ -1,0 +1,11 @@
+name,description,price,category_id,brand_id,product_image_id,is_location_offer,is_rental,post_exp_status_code,test_case
+Product A,A test product,1.99,1,1,1,1,0,201,Valid Product Creation
+Product B,Another test product,2.99,1,2,2,0,1,201,Valid Rental Product
+Invalid Price Product,This product should fail due to invalid price,-5.00,1,1,1,1,0,400,Invalid Price Validation
+Long Description,This description is intentionally very long to test the character limit of the API. It contains more than the usual amount of text to see how the system handles the input. This description is intentionally very long to test the character limit of the API. It contains more than the usual amount of text to see how the system handles the input.,15.50,1,1,1,0,0,201,Long description
+Missing Name,,20.00,1,1,1,1,0,422,Missing Required Field (Name)
+Product A,A product with a name that already exists,25.00,1,1,1,1,0,400,Duplicate Name Validation
+Zero Price Product,Test a product with zero price,0.00,1,1,1,1,0,201,Zero Price Test
+Missing Price,Test case with no price,30.00,1,1,1,1,0,400,Missing Required Field (Price)
+Large Price Product,A product with a very large price,9999999.99,1,1,1,1,0,201,Large Price Test
+Invalid Category ID,A product with an invalid category ID,35.00,99,1,1,1,0,400,Invalid Foreign Key (Category)
