@@ -55,8 +55,9 @@ jobs:
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
 
       - name: Run /POST/products tests
-        run: postman collection run "38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629" -e "38289559-261db5bb-a116-4b6d-99ad-917e86b68034" 
+        run: postman collection run toolshop.postman_collection.json -m d46f1df9-55b2-4616-8121-09749037791ae 
         continue-on-error: true
+
       - name: Cleanup
         if: always()
         run: docker compose down -v
