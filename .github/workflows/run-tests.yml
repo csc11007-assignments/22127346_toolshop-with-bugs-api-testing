@@ -47,53 +47,17 @@ jobs:
           echo "Running database migrations and seeding..."
           docker compose exec -T laravel-api php artisan migrate:fresh --seed --force
 
-      - name: Install Node.js & Newman
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-      - run: npm install -g newman newman-reporter-htmlextra
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
 
       - name: Run /POST/products tests
-        continue-on-error: true
         run: |
-          newman run sprint5-with-bugs/API/tests/api/toolshop.postman_collection.json \
-            -e sprint5-with-bugs/API/tests/api/environment.json \
-            --iteration-data sprint5-with-bugs/API/tests/api/post_products.csv \
-            --reporters cli,junit,htmlextra \
-            --reporter-junit-export newman-report-post.xml \
-            --reporter-htmlextra-export newman-report-post.html \
-            --suppress-exit-code
-      
-      - name: Run /PUT/products tests
+          postman collection run "38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629" -e "38289559-261db5bb-a116-4b6d-99ad-917e86b68034"
         continue-on-error: true
-        run: |
-          newman run sprint5-with-bugs/API/tests/api/toolshop.postman_collection.json \
-            -e sprint5-with-bugs/API/tests/api/environment.json \
-            --iteration-data sprint5-with-bugs/API/tests/api/put_products.csv \
-            --reporters cli,junit,htmlextra \
-            --reporter-junit-export newman-report-put.xml \
-            --reporter-htmlextra-export newman-report-put.html \
-            --suppress-exit-code
-
-      - name: Run /DELETE/products tests
-        continue-on-error: true
-        run: |
-          newman run sprint5-with-bugs/API/tests/api/toolshop.postman_collection.json \
-            -e sprint5-with-bugs/API/tests/api/environment.json \
-            --iteration-data sprint5-with-bugs/API/tests/api/del_products.csv \
-            --reporters cli,junit,htmlextra \
-            --reporter-junit-export newman-report-delete.xml \
-            --reporter-htmlextra-export newman-report-delete.html \
-            --suppress-exit-code
-
-      - name: Upload Test Reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: newman-reports
-          path: |
-            newman-report-*.html
-            newman-report-*.xml
 
       - name: Cleanup
         if: always()
