@@ -3,17 +3,22 @@
     "name": "API Test Environment",
     "values": [
         {
-            "key": "base_url",
+            "key": "baseUrl",
             "value": "http://localhost:8091",
             "enabled": true
         },
         {
-            "key": "api_timeout",
-            "value": "10000",
+            "key": "productId",
+            "value": "",
             "enabled": true
         },
         {
-            "key": "access_token",
+            "key": "originalData",
+            "value": "",
+            "enabled": true
+        },
+        {
+            "key": "accessToken",
             "value": "",
             "enabled": true
         }

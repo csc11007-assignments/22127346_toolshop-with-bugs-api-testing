@@ -8,10 +8,22 @@
 	"item": [
 		{
 			"name": "/products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8091/products"
+				"url": "{{baseUrl}}/products"
 			},
 			"response": []
 		},
@@ -41,12 +53,29 @@
 							"    // If the status code is 422, set the productId to 1\r",
 							"    pm.environment.set(\"productId\", 1);\r",
 							"    console.log(\"Product ID set to default (1) for invalid request.\");\r",
+							"} else if (responseStatusCode === 201) {\r",
+							"    pm.environment.set(\"productId\", responseBody.id);\r",
+							"\r",
+							"    // Save original data from the CSV to compare with the PUT response\r",
+							"    const originalData = {\r",
+							"        name: pm.iterationData.get(\"name\"),\r",
+							"        description: pm.iterationData.get(\"description\"),\r",
+							"        price: parseFloat(pm.iterationData.get(\"price\")),\r",
+							"        category_id: parseInt(pm.iterationData.get(\"category_id\")),\r",
+							"        brand_id: parseInt(pm.iterationData.get(\"brand_id\")),\r",
+							"        product_image_id: parseInt(pm.iterationData.get(\"product_image_id\")),\r",
+							"        is_location_offer: parseInt(pm.iterationData.get(\"is_location_offer\")),\r",
+							"        is_rental: parseInt(pm.iterationData.get(\"is_rental\"))\r",
+							"    };\r",
+							"    pm.environment.set(\"originalData\", JSON.stringify(originalData));\r",
+							"    console.log(`Original data saved for comparison.`);\r",
 							"} else if (responseBody && responseBody.id) {\r",
 							"    // For a successful request, set the productId from the response body\r",
 							"    pm.environment.set(\"productId\", responseBody.id);\r",
 							"    console.log(`New product ID saved: ${responseBody.id}`);\r",
 							"} else {\r",
-							"    // Handle cases where there's no ID in the response\r",
+							"    pm.environment.unset(\"productId\");\r",
+							"    pm.environment.unset(\"originalData\");\r",
 							"    console.log(\"No product ID found in the response to save.\");\r",
 							"}"
 						],
@@ -66,23 +95,26 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"category_id\": {{category_id}},\r\n  \"brand_id\": {{brand_id}},\r\n  \"product_image_id\": {{product_image_id}},\r\n  \"is_location_offer\": {{is_location_offer}},\r\n  \"is_rental\": {{is_rental}}\r\n}\r\n\r\n",
+					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"category_id\": {{category_id}},\r\n  \"brand_id\": {{brand_id}},\r\n  \"product_image_id\": {{product_image_id}},\r\n  \"is_location_offer\": {{is_location_offer}},\r\n  \"is_rental\": {{is_rental}}\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://localhost:8091/products"
+				"url": "{{baseUrl}}/products"
 			},
 			"response": []
 		},
 		{
-			"name": "/login",
+			"name": "/users/login",
 			"event": [
 				{
 					"listen": "test",
@@ -106,6 +138,9 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -117,7 +152,7 @@
 						}
 					}
 				},
-				"url": "http://localhost:8091/users/login"
+				"url": "{{baseUrl}}/users/login"
 			},
 			"response": []
 		},
@@ -151,57 +186,151 @@
 						"type": "text/javascript",
 						"packages": {}
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "{{access_token}}"
+						"token": "{{accessToken}}"
 					}
 				},
 				"method": "DELETE",
 				"header": [],
-				"url": "http://localhost:8091/products/{{productId}}"
+				"url": "{{baseUrl}}/products/{{productId}}"
 			},
 			"response": []
 		},
 		{
 			"name": "/products/{{productId}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseBody = pm.response.json();\r",
+							"const testCaseName = pm.iterationData.get(\"test_case\");\r",
+							"const expectedStatusCode = pm.iterationData.get(\"get_exp_status_code\");\r",
+							"\r",
+							"pm.test(`[${testCaseName}] Status code is ${expectedStatusCode}`, function () {\r",
+							"    pm.response.to.have.status(parseInt(expectedStatusCode));\r",
+							"});\r",
+							"\r",
+							"console.log(pm.environment.get(\"updatedData\"), pm.environment.get(\"originalData\"))\r",
+							"// Only proceed with data comparison if the GET request was successful\r",
+							"if (pm.response.code === 200) {\r",
+							"    const updatedData = JSON.parse(pm.environment.get(\"updatedData\"));\r",
+							"\r",
+							"    // Compare each property to verify the update was successful\r",
+							"    pm.test(`[${testCaseName}] Verify that the name was updated correctly`, function () {\r",
+							"        pm.expect(responseBody.name).to.eql(updatedData.name);\r",
+							"    });\r",
+							"    pm.test(`[${testCaseName}] Verify that the description was updated correctly`, function () {\r",
+							"        pm.expect(responseBody.description).to.eql(updatedData.description);\r",
+							"    });\r",
+							"    pm.test(`[${testCaseName}] Verify that the price was updated correctly`, function () {\r",
+							"        pm.expect(responseBody.price).to.eql(updatedData.price);\r",
+							"    });\r",
+							"} else {\r",
+							"    console.log(\"GET request failed, skipping data comparison.\");\r",
+							"}\r",
+							"\r",
+							"if (pm.environment.get('originalData')) {\r",
+							"    pm.environment.unset('originalData');\r",
+							"}\r",
+							"\r",
+							"if (pm.environment.get('updatedData')) {\r",
+							"    pm.environment.unset('updatedData');\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "{{access_token}}"
-					}
+					"type": "noauth"
 				},
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8091/products/{{productId}}"
+				"url": "{{baseUrl}}/products/{{productId}}"
 			},
 			"response": []
 		},
 		{
 			"name": "/products/{{productId}}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseBody = pm.response.json();\r",
+							"const testCaseName = pm.iterationData.get(\"test_case\");\r",
+							"const expectedStatusCode = pm.iterationData.get(\"put_exp_status_code\");\r",
+							"\r",
+							"pm.test(`[${testCaseName}] Status code is ${expectedStatusCode}`, function () {\r",
+							"    pm.response.to.have.status(parseInt(expectedStatusCode));\r",
+							"});\r",
+							"\r",
+							"// Save the updated data from the CSV to compare with the GET response\r",
+							"if (pm.response.code === 200) {\r",
+							"    const updatedData = {\r",
+							"        id: pm.environment.get(\"productId\"), // Include the ID\r",
+							"        name: pm.iterationData.get(\"updated_name\"),\r",
+							"        description: pm.iterationData.get(\"updated_description\"),\r",
+							"        price: parseFloat(pm.iterationData.get(\"updated_price\")),\r",
+							"        category_id: parseInt(pm.iterationData.get(\"category_id\")), // These are not updated in the CSV\r",
+							"        brand_id: parseInt(pm.iterationData.get(\"brand_id\")),\r",
+							"        product_image_id: parseInt(pm.iterationData.get(\"product_image_id\")),\r",
+							"        is_location_offer: parseInt(pm.iterationData.get(\"is_location_offer\")),\r",
+							"        is_rental: parseInt(pm.iterationData.get(\"is_rental\"))\r",
+							"    };\r",
+							"    pm.environment.set(\"updatedData\", JSON.stringify(updatedData));\r",
+							"    console.log(`Updated data saved for GET verification.`);\r",
+							"} else {\r",
+							"    pm.environment.unset(\"updatedData\");\r",
+							"    console.log(\"PUT request failed, no updated data to save.\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "{{access_token}}"
-					}
+					"type": "noauth"
 				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"{{name}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"category_id\": {{category_id}},\r\n  \"brand_id\": {{brand_id}},\r\n  \"product_image_id\": {{product_image_id}},\r\n  \"is_location_offer\": {{is_location_offer}},\r\n  \"is_rental\": {{is_rental}}\r\n}",
+					"raw": "{\r\n  \"name\": \"{{updated_name}}\",\r\n  \"description\": \"{{updated_description}}\",\r\n  \"price\": {{updated_price}},\r\n  \"category_id\": {{category_id}},\r\n  \"brand_id\": {{brand_id}},\r\n  \"product_image_id\": {{product_image_id}},\r\n  \"is_location_offer\": {{is_location_offer}},\r\n  \"is_rental\": {{is_rental}}\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://localhost:8091/products/{{productId}}"
+				"url": "{{baseUrl}}/products/{{productId}}"
 			},
 			"response": []
 		}
