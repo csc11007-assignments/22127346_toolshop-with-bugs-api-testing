@@ -1,0 +1,71 @@
+{
+    "id": "api-test-environment-dynamic",
+    "name": "API Test Environment with Dynamic Variables",
+    "values": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8091",
+            "enabled": true,
+            "type": "default"
+        },
+        {
+            "key": "productId",
+            "value": "",
+            "enabled": true,
+            "type": "dynamic",
+            "description": "Dynamically set from POST /products response"
+        },
+        {
+            "key": "originalData",
+            "value": "",
+            "enabled": true,
+            "type": "dynamic",
+            "description": "Original product data for comparison in tests"
+        },
+        {
+            "key": "updatedData",
+            "value": "",
+            "enabled": true,
+            "type": "dynamic",
+            "description": "Updated product data for PUT/GET verification"
+        },
+        {
+            "key": "accessToken",
+            "value": "",
+            "enabled": true,
+            "type": "dynamic",
+            "description": "JWT token from login response"
+        },
+        {
+            "key": "defaultProductId",
+            "value": "1",
+            "enabled": true,
+            "type": "fallback",
+            "description": "Fallback product ID when dynamic creation fails"
+        },
+        {
+            "key": "adminEmail",
+            "value": "admin@practicesoftwaretesting.com",
+            "enabled": true,
+            "type": "default"
+        },
+        {
+            "key": "adminPassword",
+            "value": "welcome01",
+            "enabled": true,
+            "type": "default"
+        },
+        {
+            "key": "customerEmail",
+            "value": "customer@practicesoftwaretesting.com",
+            "enabled": true,
+            "type": "default"
+        },
+        {
+            "key": "customerPassword",
+            "value": "welcome01",
+            "enabled": true,
+            "type": "default"
+        }
+    ]
+} 
