@@ -55,8 +55,7 @@ jobs:
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
 
       - name: Run /POST/products tests
-        run: |
-          postman collection run "38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629" -e "38289559-261db5bb-a116-4b6d-99ad-917e86b68034"
+        run: postman collection run "38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629" -e "38289559-261db5bb-a116-4b6d-99ad-917e86b68034" -i "38289559-106268c8-2706-4543-b11a-900c7c018a91" -i "38289559-a37161b4-c8eb-456b-b576-a17fcb87a146" -i "38289559-8eb02283-f83b-4bbe-8558-be7a0e0eacd3"
         continue-on-error: true
 
       - name: Cleanup
