@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-        run: npm install -g newman newman-reporter-htmlextra
+      - run: npm install -g newman newman-reporter-htmlextra
 
       - name: Install Postman CLI
         run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh 
