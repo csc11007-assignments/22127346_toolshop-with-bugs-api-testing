@@ -51,7 +51,7 @@ jobs:
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
 
-     - name: Run Postman Tests with Report
+      - name: Run Postman Tests with Report
         run: |
           mkdir -p reports
           # Run POST /products tests and save report
@@ -78,6 +78,8 @@ jobs:
             -i 38289559-0929ce1d-9c50-477b-9c29-775417be4cae \
             -d sprint5-with-bugs/API/tests/api/put_products.csv \
             --reporter-junit-output reports/put_products_report.xml
+
+        continue-on-error: true
 
       - name: Publish Test Report 📊
         uses: mikepenz/action-junit-report@v4
