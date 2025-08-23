@@ -70,8 +70,8 @@ jobs:
             -i 38289559-106268c8-2706-4543-b11a-900c7c018a91 \
             -d sprint5-with-bugs/API/tests/api/post_products.csv\
             --reporters cli,junit,html \
-            --reporter-junit-export newman-report.xml \
-            --reporter-html-export newman-report.html || true
+            --reporter-junit-export post-products-report.xml \
+            --reporter-html-export post-products-report.html || true
        
       - name: Run DELETE /products/productId tests and save report
         run: |
@@ -82,8 +82,8 @@ jobs:
             -i 38289559-8eb02283-f83b-4bbe-8558-be7a0e0eacd3 \
             -d sprint5-with-bugs/API/tests/api/del_products.csv \
             --reporters cli,junit,html \
-            --reporter-junit-export newman-report.xml \
-            --reporter-html-export newman-report.html || true
+            --reporter-junit-export del-products-report.xml \
+            --reporter-html-export del-products-report.html || true
         
 
       - name: Run PUT /products/productId tests and save report
@@ -95,8 +95,8 @@ jobs:
             -i 38289559-0929ce1d-9c50-477b-9c29-775417be4cae \
             -d sprint5-with-bugs/API/tests/api/put_products.csv \
             --reporters cli,junit,html \
-            --reporter-junit-export newman-report.xml \
-            --reporter-html-export newman-report.html || true
+            --reporter-junit-export put-products-report.xml \
+            --reporter-html-export put-products-report.html || true
         
       - name: Upload Test Report 📊
         uses: actions/upload-artifact@v4
@@ -104,8 +104,8 @@ jobs:
         with:
           name: newman-report
           path: |
-            newman-report.html
-            newman-report.xml
+            *.html
+            *.xml
 
       - name: Cleanup
         if: always()
