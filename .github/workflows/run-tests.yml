@@ -49,11 +49,13 @@ jobs:
           echo "Running database migrations and seeding..."
           docker compose exec -T laravel-api php artisan migrate:fresh --seed --force
 
-      - name: Install Newman
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-      - run: npm install -g newman newman-reporter-htmlextra
+          node-version: "22"
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
 
       - name: Install Postman CLI
         run: curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh 
