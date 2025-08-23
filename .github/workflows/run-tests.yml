@@ -85,9 +85,16 @@ jobs:
             -i 38289559-744fab8c-5d24-4ea0-88db-4d1ac5c3ab16 \
             -i 38289559-0929ce1d-9c50-477b-9c29-775417be4cae \
             -d sprint5-with-bugs/API/tests/api/put_products.csv \
-            --reporter-junit-output reports/put_products_report.xml \
-          ls -la reports
+            --reporter-junit-output reports/put_products_report.xml 
         continue-on-error: true
+
+      - name: view report
+        run: |
+          echo "Viewing report..."
+          ls -la reports
+          cat reports/post_products_report.xml
+          cat reports/del_products_report.xml
+          cat reports/put_products_report.xml
 
       - name: Publish Test Report 📊
         uses: mikepenz/action-junit-report@v4
