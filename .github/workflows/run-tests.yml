@@ -68,7 +68,8 @@ jobs:
             -d sprint5-with-bugs/API/tests/api/post_products.csv\
             --reporters cli,junit,html \
             --reporter-junit-export post-products-report.xml \
-            --reporter-html-export post-products-report.html || true
+            --reporter-html-export post-products-report.html
+        continue-on-error: true``
        
       - name: Run DELETE /products/productId tests and save report
         run: |
@@ -80,8 +81,8 @@ jobs:
             -d sprint5-with-bugs/API/tests/api/del_products.csv \
             --reporters cli,junit,html \
             --reporter-junit-export del-products-report.xml \
-            --reporter-html-export del-products-report.html || true
-        
+            --reporter-html-export del-products-report.html
+        continue-on-error: true
 
       - name: Run PUT /products/productId tests and save report
         run: |
@@ -93,7 +94,8 @@ jobs:
             -d sprint5-with-bugs/API/tests/api/put_products.csv \
             --reporters cli,junit,html \
             --reporter-junit-export put-products-report.xml \
-            --reporter-html-export put-products-report.html || true
+            --reporter-html-export put-products-report.html
+        continue-on-error: true
         
       - name: Upload Test Report 📊
         uses: actions/upload-artifact@v4
