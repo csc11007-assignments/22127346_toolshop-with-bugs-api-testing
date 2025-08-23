@@ -61,6 +61,7 @@ jobs:
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
 
       - name: Run POST /products tests and save report
+        continue-on-error: true
         run: |
           postman collection run 38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629 \
             -e 38289559-261db5bb-a116-4b6d-99ad-917e86b68034 \
@@ -69,9 +70,9 @@ jobs:
             --reporters cli,junit,html \
             --reporter-junit-export post-products-report.xml \
             --reporter-html-export post-products-report.html
-        continue-on-error: true``
        
       - name: Run DELETE /products/productId tests and save report
+        continue-on-error: true
         run: |
           postman collection run 38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629 \
             -e 38289559-261db5bb-a116-4b6d-99ad-917e86b68034 \
@@ -82,9 +83,9 @@ jobs:
             --reporters cli,junit,html \
             --reporter-junit-export del-products-report.xml \
             --reporter-html-export del-products-report.html
-        continue-on-error: true
 
       - name: Run PUT /products/productId tests and save report
+        continue-on-error: true
         run: |
           postman collection run 38289559-a4740aaf-0f68-4a2a-a1fa-fd223f413629 \
             -e 38289559-261db5bb-a116-4b6d-99ad-917e86b68034 \
@@ -95,7 +96,6 @@ jobs:
             --reporters cli,junit,html \
             --reporter-junit-export put-products-report.xml \
             --reporter-html-export put-products-report.html
-        continue-on-error: true
         
       - name: Upload Test Report 📊
         uses: actions/upload-artifact@v4
