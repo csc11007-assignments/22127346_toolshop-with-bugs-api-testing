@@ -94,16 +94,14 @@ jobs:
             --reporter-junit-export put-products-report.xml \
             --reporter-html-export put-products-report.html || true
         
-      - name: Upload Test Report 📊
-        uses: actions/upload-artifact@v4
+      - name: Publish Test Report 📊
+        uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          name: newman-report
-          path: |
-            *.html
-            *.xml
-          fail_on_failure: true
-          
+          report_paths: '*.xml' # Look for all XML files in the current directory
+          check_name: 'Postman API Test Report'
+          fail_on_failure: true # This is the key change to make the job fail if tests fail
+
       - name: Cleanup
         if: always()
         run: docker compose down -v
