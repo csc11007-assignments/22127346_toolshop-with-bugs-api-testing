@@ -94,13 +94,22 @@ jobs:
             --reporter-junit-export put-products-report.xml \
             --reporter-html-export put-products-report.html || true
         
-      - name: Publish Test Report 📊
+      - name: Upload Test Report 📊
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newman-report
+          path: |
+            *.html
+            *.xml
+          
+      - name: Verdict on test report 📊
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: '*.xml' # Look for all XML files in the current directory
+          report_paths: '*.xml'
           check_name: 'Postman API Test Report'
-          fail_on_failure: true # This is the key change to make the job fail if tests fail
+          fail_on_failure: true
 
       - name: Cleanup
         if: always()
