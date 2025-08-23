@@ -79,8 +79,6 @@ jobs:
             -d sprint5-with-bugs/API/tests/api/put_products.csv \
             --reporter-junit-output reports/put_products_report.xml
 
-        continue-on-error: true
-
       - name: Publish Test Report 📊
         uses: mikepenz/action-junit-report@v4
         if: always()
