@@ -108,7 +108,6 @@ jobs:
         if: always()
         with:
           report_paths: '*.xml'
-          check_name: 'Postman API Test Report'
           fail_on_failure: true
 
       - name: Cleanup
