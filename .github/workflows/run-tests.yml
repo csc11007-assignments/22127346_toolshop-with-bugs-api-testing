@@ -11,7 +11,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    permissions:
+      checks: write
+    
     steps:
       - name: Checkout Code ⚙️
         uses: actions/checkout@v4
@@ -83,7 +85,8 @@ jobs:
             -i 38289559-744fab8c-5d24-4ea0-88db-4d1ac5c3ab16 \
             -i 38289559-0929ce1d-9c50-477b-9c29-775417be4cae \
             -d sprint5-with-bugs/API/tests/api/put_products.csv \
-            --reporter-junit-output reports/put_products_report.xml
+            --reporter-junit-output reports/put_products_report.xml \
+          ls -la reports
         continue-on-error: true
 
       - name: Publish Test Report 📊
